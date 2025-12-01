@@ -1,0 +1,367 @@
+//
+//  SupabaseDatabaseService.swift
+//  simpleApp
+//
+//  Supabase implementation of DatabaseServiceProtocol
+//
+
+import Foundation
+import Supabase
+import PostgREST
+
+@MainActor
+class SupabaseDatabaseService: DatabaseServiceProtocol {
+    static let shared = SupabaseDatabaseService()
+
+    private let client: SupabaseClient
+    private let profilesTable = "user_profiles"
+    private let entriesTable = "week_entries"
+
+    private init() {
+        print("🔵 SupabaseDatabaseService: Initialized")
+
+        // Uncomment after adding Supabase package:
+        /*
+        guard let client = SupabaseConfig.shared.client else {
+            print("❌ SupabaseDatabaseService: Supabase client not initialized")
+            return
+        }
+        self.client = client
+        */
+    }
+
+    // MARK: - User Profile Management
+
+    func saveProfile(_ profile: UserProfile) async throws {
+        guard let userId = profile.userId else {
+            print("❌ SupabaseDatabaseService: Cannot save profile without userId")
+            throw DatabaseError.missingUserId
+        }
+
+        print("🔵 SupabaseDatabaseService.saveProfile: Saving profile for user: \(userId)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            let profileData: [String: Any] = [
+                "user_id": userId,
+                "email": profile.email ?? "",
+                "is_anonymous": profile.isAnonymous,
+                "name": profile.name,
+                "date_of_birth": ISO8601DateFormatter().string(from: profile.dateOfBirth),
+                "industry": profile.industry,
+                "job_role": profile.jobRole,
+                "years_worked": profile.yearsWorked,
+                "relationship_status": profile.relationshipStatus.rawValue,
+                "number_of_kids": profile.numberOfKids,
+                "number_of_pets": profile.numberOfPets,
+                "updated_at": ISO8601DateFormatter().string(from: Date())
+            ]
+
+            try await client.database
+                .from(profilesTable)
+                .upsert(profileData)
+                .execute()
+
+            print("✅ SupabaseDatabaseService.saveProfile: Profile saved successfully")
+        } catch {
+            print("❌ SupabaseDatabaseService.saveProfile: Failed - \(error.localizedDescription)")
+            throw DatabaseError.saveFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.saveFailed("Supabase SDK not installed")
+    }
+
+    func loadProfile(userId: String) async throws -> UserProfile? {
+        print("🔵 SupabaseDatabaseService.loadProfile: Loading profile for user: \(userId)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            let response: [UserProfileDTO] = try await client.database
+                .from(profilesTable)
+                .select()
+                .eq("user_id", value: userId)
+                .single()
+                .execute()
+                .value
+
+            guard let profileDTO = response.first else {
+                print("🔵 SupabaseDatabaseService.loadProfile: No profile found")
+                return nil
+            }
+
+            let profile = profileDTO.toUserProfile()
+            print("✅ SupabaseDatabaseService.loadProfile: Profile loaded - Name: \(profile.name)")
+            return profile
+        } catch {
+            print("❌ SupabaseDatabaseService.loadProfile: Failed - \(error.localizedDescription)")
+            throw DatabaseError.loadFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.loadFailed("Supabase SDK not installed")
+    }
+
+    // MARK: - Week Entries Management
+
+    func saveEntry(_ entry: WeekEntry) async throws {
+        print("🔵 SupabaseDatabaseService.saveEntry: Saving entry ID: \(entry.id.uuidString)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            let entryData: [String: Any] = [
+                "id": entry.id.uuidString,
+                "user_id": entry.userId,
+                "week_number": entry.weekNumber,
+                "week_year": entry.weekYear,
+                "title": entry.title,
+                "description": entry.description,
+                "entry_type": entry.entryType.rawValue,
+                "photo_urls": entry.photoURLs,
+                "audio_urls": entry.audioURLs,
+                "day_of_week": entry.dayOfWeek as Any,
+                "created_at": ISO8601DateFormatter().string(from: entry.createdAt),
+                "updated_at": ISO8601DateFormatter().string(from: entry.updatedAt)
+            ]
+
+            try await client.database
+                .from(entriesTable)
+                .insert(entryData)
+                .execute()
+
+            print("✅ SupabaseDatabaseService.saveEntry: Entry saved successfully")
+        } catch {
+            print("❌ SupabaseDatabaseService.saveEntry: Failed - \(error.localizedDescription)")
+            throw DatabaseError.saveFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.saveFailed("Supabase SDK not installed")
+    }
+
+    func updateEntry(_ entry: WeekEntry) async throws {
+        print("🔵 SupabaseDatabaseService.updateEntry: Updating entry ID: \(entry.id.uuidString)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            var updatedEntry = entry
+            updatedEntry.updatedAt = Date()
+
+            let entryData: [String: Any] = [
+                "week_number": updatedEntry.weekNumber,
+                "week_year": updatedEntry.weekYear,
+                "title": updatedEntry.title,
+                "description": updatedEntry.description,
+                "entry_type": updatedEntry.entryType.rawValue,
+                "photo_urls": updatedEntry.photoURLs,
+                "audio_urls": updatedEntry.audioURLs,
+                "day_of_week": updatedEntry.dayOfWeek as Any,
+                "updated_at": ISO8601DateFormatter().string(from: updatedEntry.updatedAt)
+            ]
+
+            try await client.database
+                .from(entriesTable)
+                .update(entryData)
+                .eq("id", value: entry.id.uuidString)
+                .execute()
+
+            print("✅ SupabaseDatabaseService.updateEntry: Entry updated successfully")
+        } catch {
+            print("❌ SupabaseDatabaseService.updateEntry: Failed - \(error.localizedDescription)")
+            throw DatabaseError.updateFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.updateFailed("Supabase SDK not installed")
+    }
+
+    func deleteEntry(_ entry: WeekEntry) async throws {
+        print("🔵 SupabaseDatabaseService.deleteEntry: Deleting entry ID: \(entry.id.uuidString)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            try await client.database
+                .from(entriesTable)
+                .delete()
+                .eq("id", value: entry.id.uuidString)
+                .execute()
+
+            print("✅ SupabaseDatabaseService.deleteEntry: Entry deleted successfully")
+        } catch {
+            print("❌ SupabaseDatabaseService.deleteEntry: Failed - \(error.localizedDescription)")
+            throw DatabaseError.deleteFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.deleteFailed("Supabase SDK not installed")
+    }
+
+    func loadEntries(userId: String) async throws -> [WeekEntry] {
+        print("🔵 SupabaseDatabaseService.loadEntries: Loading entries for user: \(userId)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        do {
+            let response: [WeekEntryDTO] = try await client.database
+                .from(entriesTable)
+                .select()
+                .eq("user_id", value: userId)
+                .order("created_at", ascending: false)
+                .execute()
+                .value
+
+            let entries = response.map { $0.toWeekEntry() }
+            print("✅ SupabaseDatabaseService.loadEntries: Loaded \(entries.count) entries")
+            return entries
+        } catch {
+            print("❌ SupabaseDatabaseService.loadEntries: Failed - \(error.localizedDescription)")
+            throw DatabaseError.loadFailed(error.localizedDescription)
+        }
+        */
+
+        // Temporary placeholder
+        throw DatabaseError.loadFailed("Supabase SDK not installed")
+    }
+
+    // MARK: - Real-time Listeners
+
+    func observeEntries(userId: String, onChange: @escaping ([WeekEntry]) -> Void) -> Any {
+        print("🔵 SupabaseDatabaseService.observeEntries: Setting up listener for user: \(userId)")
+
+        // Uncomment after adding Supabase package:
+        /*
+        let channel = client.realtime.channel("entries:\(userId)")
+
+        Task {
+            do {
+                let changes = channel.postgresChange(
+                    AnyAction.self,
+                    schema: "public",
+                    table: entriesTable,
+                    filter: "user_id=eq.\(userId)"
+                )
+
+                await channel.subscribe()
+
+                for await change in changes {
+                    // Reload entries when changes occur
+                    do {
+                        let entries = try await loadEntries(userId: userId)
+                        onChange(entries)
+                    } catch {
+                        print("❌ SupabaseDatabaseService: Error reloading entries: \(error)")
+                    }
+                }
+            } catch {
+                print("❌ SupabaseDatabaseService: Failed to setup realtime listener: \(error)")
+            }
+        }
+
+        return channel
+        */
+
+        // Temporary placeholder
+        print("⚠️ SupabaseDatabaseService: Realtime listeners not available until SDK is installed")
+        return NSObject() // Dummy object
+    }
+
+    func removeListener(_ listener: Any) {
+        print("🔵 SupabaseDatabaseService.removeListener: Removing listener")
+
+        // Uncomment after adding Supabase package:
+        /*
+        if let channel = listener as? RealtimeChannel {
+            Task {
+                await client.realtime.remove(channel)
+                print("✅ SupabaseDatabaseService: Listener removed")
+            }
+        }
+        */
+    }
+}
+
+// MARK: - Data Transfer Objects (DTOs)
+
+// Uncomment after adding Supabase package:
+/*
+struct UserProfileDTO: Codable {
+    let user_id: String
+    let email: String?
+    let is_anonymous: Bool
+    let name: String
+    let date_of_birth: String
+    let industry: String
+    let job_role: String
+    let years_worked: Double
+    let relationship_status: String
+    let number_of_kids: Int
+    let number_of_pets: Int
+
+    func toUserProfile() -> UserProfile {
+        let dateFormatter = ISO8601DateFormatter()
+        let dob = dateFormatter.date(from: date_of_birth) ?? Date()
+        let status = RelationshipStatus(rawValue: relationship_status) ?? .single
+
+        return UserProfile(
+            userId: user_id,
+            email: email,
+            isAnonymous: is_anonymous,
+            name: name,
+            dateOfBirth: dob,
+            industry: industry,
+            jobRole: job_role,
+            yearsWorked: years_worked,
+            relationshipStatus: status,
+            numberOfKids: number_of_kids,
+            numberOfPets: number_of_pets
+        )
+    }
+}
+
+struct WeekEntryDTO: Codable {
+    let id: String
+    let user_id: String
+    let week_number: Int
+    let week_year: Int
+    let title: String
+    let description: String
+    let entry_type: String
+    let photo_urls: [String]
+    let audio_urls: [String]
+    let day_of_week: Int?
+    let created_at: String
+    let updated_at: String
+
+    func toWeekEntry() -> WeekEntry {
+        let dateFormatter = ISO8601DateFormatter()
+        let created = dateFormatter.date(from: created_at) ?? Date()
+        let updated = dateFormatter.date(from: updated_at) ?? Date()
+        let type = WeekEntry.EntryType(rawValue: entry_type) ?? .memory
+
+        return WeekEntry(
+            id: UUID(uuidString: id) ?? UUID(),
+            userId: user_id,
+            weekNumber: week_number,
+            weekYear: week_year,
+            title: title,
+            description: description,
+            entryType: type,
+            photoURLs: photo_urls,
+            audioURLs: audio_urls,
+            dayOfWeek: day_of_week,
+            createdAt: created,
+            updatedAt: updated
+        )
+    }
+}
+*/
